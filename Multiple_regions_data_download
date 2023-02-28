@@ -1,0 +1,25 @@
+Map.addLayer(cc,{},"Area of Interest");
+Map.centerObject(cc);
+
+var startDate = '2019-01-01';
+var endtDate = '2019-03-30';
+
+var image = senti.filterBounds(cc).filterDate(startDate,endtDate)
+              
+var scaled = image.map(function(img){
+            return img.multiply(100000000)
+            });              
+//var clip = image.clip(aoi);
+var chart = ui.Chart.image.doySeriesByRegion({
+                    imageCollection: image, 
+                    bandName:'NO2_column_number_density', 
+                    regions: cc, 
+                    regionReducer:ee.Reducer.mean(),
+                    scale: 1100, 
+                    yearReducer: ee.Reducer.mean(),
+                    seriesProperty: 'city_name',
+                    startDay: 1,
+                    endDay: 365
+                    });
+
+print("Chart",chart);
